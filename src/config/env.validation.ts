@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
-import { IsEnum, IsNumber, validateSync } from 'class-validator';
+import { IsEnum, IsNumber, IsString, validateSync } from 'class-validator';
 
-enum Environment {
+export enum Environment {
   Development = 'development',
   Production = 'production',
 }
@@ -12,6 +12,17 @@ class EnvironmentVariables {
 
   @IsNumber()
   PORT: number;
+
+  @IsString()
+  DB_HOST: string;
+  @IsNumber()
+  DB_PORT: number;
+  @IsString()
+  DB_USERNAME: string;
+  @IsString()
+  DB_PASSWORD: string;
+  @IsString()
+  DB_DATABASE: string;
 }
 
 export function validate(config: Record<string, unknown>) {
