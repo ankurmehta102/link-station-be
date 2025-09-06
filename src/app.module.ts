@@ -6,6 +6,8 @@ import configuration from './config/configuration';
 import { validate } from './config/env.validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Environment } from './config/env.validation';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { Environment } from './config/env.validation';
           username: configService.get('database').username,
           password: configService.get('database').password,
           database: configService.get('database').database,
-          entities: [],
+          entities: [User],
           synchronize:
             configService.get('node_env') === Environment.Development,
           extra: {
@@ -35,6 +37,7 @@ import { Environment } from './config/env.validation';
       },
       inject: [ConfigService],
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
