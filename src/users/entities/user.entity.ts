@@ -41,7 +41,7 @@ export class User {
   @Expose()
   @Column({
     type: 'nvarchar',
-    length: 50,
+    length: 30,
     unique: true,
   })
   username: string;
@@ -50,7 +50,7 @@ export class User {
   @Column({
     name: 'first_name',
     type: 'nvarchar',
-    length: 50,
+    length: 30,
   })
   firstName: string;
 
@@ -58,7 +58,7 @@ export class User {
   @Column({
     name: 'last_name',
     type: 'nvarchar',
-    length: 50,
+    length: 30,
     nullable: true,
   })
   lastName: string;
@@ -89,7 +89,7 @@ export class User {
   @Column({
     name: 'user_role',
     type: 'varchar',
-    length: 12,
+    length: 8,
     default: UserRole.User,
   })
   userRole: UserRole;
