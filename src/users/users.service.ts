@@ -21,24 +21,24 @@ export class UsersService {
     try {
       const { email, password, username } = createUserDto;
 
-      const isUserExist = await this.usersRepo.findOne({
+      const existingUser = await this.usersRepo.findOne({
         where: [{ email }, { username }],
       });
 
-      if (isUserExist?.email === email) {
+      if (existingUser?.email === email) {
         throw new ConflictException('Email is already in use');
       }
-      if (isUserExist?.username === username) {
+      if (existingUser?.username === username) {
         throw new ConflictException('Username is already in use');
       }
 
       const passwordHash = await hash(password, 10);
 
-      const userInstance = this.usersRepo.create({
+      const newUser = this.usersRepo.create({
         passwordHash,
         ...createUserDto,
       });
-      const savedUser = await this.usersRepo.save(userInstance);
+      const savedUser = await this.usersRepo.save(newUser);
 
       return plainToInstance(User, savedUser, {
         excludeExtraneousValues: true,
@@ -52,24 +52,27 @@ export class UsersService {
   async updateUsername(updateUsernameDto: UpdateUsernameDto) {
     try {
       const { userId, username } = updateUsernameDto;
-      const users = await this.usersRepo.find({
+      const usersFound = await this.usersRepo.find({
         where: [{ userId }, { username }],
       });
 
-      if (!users.length || (users.length === 1 && users[0].userId !== userId)) {
+      if (
+        !usersFound.length ||
+        (usersFound.length === 1 && usersFound[0].userId !== userId)
+      ) {
         throw new NotFoundException('User does not exist');
       }
-      if (users.length > 1) {
+      if (usersFound.length > 1) {
         throw new ConflictException('Username is already in use');
       }
 
-      users[0].username = username;
-      const savedUser = await this.usersRepo.save(users[0]);
+      usersFound[0].username = username;
+      const savedUser = await this.usersRepo.save(usersFound[0]);
       return plainToInstance(User, savedUser, {
         excludeExtraneousValues: true,
       });
     } catch (err) {
-      console.log('[updateUsername] err--->');
+      console.log('[updateUsername] err--->', err);
       throw err;
     }
   }
