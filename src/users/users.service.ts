@@ -3,12 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
 import { hash } from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
 import { UpdateUsernameDto } from './dto/update-username.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
 
@@ -18,6 +19,7 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepo: Repository<User>,
   ) {}
+
   async create(createUserDto: CreateUserDto) {
     try {
       const { email, password, username } = createUserDto;
