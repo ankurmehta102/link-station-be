@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { UpdateUsernameDto } from './dto/update-username.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -104,6 +105,30 @@ export class UsersService {
       });
     } catch (err) {
       console.log('[updateEmail] err--->', err);
+      throw err;
+    }
+  }
+
+  async updatePassword(updatePasswordDto: UpdatePasswordDto) {
+    try {
+      const { userId, password } = updatePasswordDto;
+
+      const user = await this.usersRepo.findOneBy({ userId });
+
+      if (!user) {
+        throw new NotFoundException('User does not exist');
+      }
+
+      const passwordHash = await hash(password, 10);
+
+      user.passwordHash = passwordHash;
+      const savedUser = await this.usersRepo.save(user);
+
+      return plainToInstance(User, savedUser, {
+        excludeExtraneousValues: true,
+      });
+    } catch (err) {
+      console.log('[updatePassword] err--->', err);
       throw err;
     }
   }

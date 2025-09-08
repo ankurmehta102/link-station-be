@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUsernameDto } from './dto/update-username.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 
 @Controller('users')
 export class UsersController {
@@ -22,5 +23,10 @@ export class UsersController {
   @Patch('email')
   updateEmail(@Body() updateEmailDto: UpdateEmailDto) {
     return this.usersService.updateEmail(updateEmailDto);
+  }
+
+  @Patch('password')
+  updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
+    return this.usersService.updatePassword(updatePasswordDto);
   }
 }
