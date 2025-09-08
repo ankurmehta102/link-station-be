@@ -10,6 +10,7 @@ import { User } from './entities/user.entity';
 import { hash } from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { UpdateUsernameDto } from './dto/update-username.dto';
+import { UpdateEmailDto } from './dto/update-email.dto';
 
 @Injectable()
 export class UsersService {
@@ -73,6 +74,34 @@ export class UsersService {
       });
     } catch (err) {
       console.log('[updateUsername] err--->', err);
+      throw err;
+    }
+  }
+
+  async updateEmail(updateEmailDto: UpdateEmailDto) {
+    try {
+      const { userId, email } = updateEmailDto;
+      const usersFound = await this.usersRepo.find({
+        where: [{ userId }, { email }],
+      });
+
+      if (
+        !usersFound.length ||
+        (usersFound.length === 1 && usersFound[0].userId !== userId)
+      ) {
+        throw new NotFoundException('User does not exist');
+      }
+      if (usersFound.length > 1) {
+        throw new ConflictException('Email is already in use');
+      }
+
+      usersFound[0].email = email;
+      const savedUser = await this.usersRepo.save(usersFound[0]);
+      return plainToInstance(User, savedUser, {
+        excludeExtraneousValues: true,
+      });
+    } catch (err) {
+      console.log('[updateEmail] err--->', err);
       throw err;
     }
   }
