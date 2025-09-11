@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -41,5 +42,10 @@ export class UsersController {
   @Get('profile/:userId')
   getUserProfile(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.getUserProfile(userId);
+  }
+
+  @Delete(':userId')
+  deleteUser(@Param('userId', ParseIntPipe) userId: number) {
+    return this.usersService.deleteUser(userId);
   }
 }

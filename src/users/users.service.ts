@@ -150,4 +150,20 @@ export class UsersService {
       throw err;
     }
   }
+
+  async deleteUser(userId: number) {
+    try {
+      const user = await this.usersRepo.findOneBy({ userId });
+
+      if (!user) {
+        throw new NotFoundException('User does not exist');
+      }
+
+      await this.usersRepo.remove(user);
+      return 'User deleted';
+    } catch (err) {
+      console.log('[deleteUser] err--->', err);
+      throw err;
+    }
+  }
 }
