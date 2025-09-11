@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
@@ -10,11 +11,13 @@ import {
 
 export class BaseUserDto {
   @IsNumber()
+  @Expose()
   userId: number;
 
   @IsEmail()
   @IsNotEmpty()
   @MaxLength(255)
+  @Expose()
   email: string;
 
   @IsString()
@@ -26,15 +29,36 @@ export class BaseUserDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
+  @Expose()
   username: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
+  @Expose()
   firstName: string;
 
   @IsString()
   @IsOptional()
   @MaxLength(20)
+  @Expose()
   lastName?: string;
+
+  @Expose()
+  displayEmail: string;
+
+  @Expose()
+  bio: string;
+
+  @Expose()
+  profilePictureUrl: string;
+
+  @Expose()
+  userRole: string;
+
+  @Expose()
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
 }

@@ -1,4 +1,12 @@
-import { Body, Controller, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,5 +36,10 @@ export class UsersController {
   @Patch('password')
   updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
     return this.usersService.updatePassword(updatePasswordDto);
+  }
+
+  @Get('profile/:userId')
+  getUserProfile(@Param('userId', ParseIntPipe) userId: number) {
+    return this.usersService.getUserProfile(userId);
   }
 }

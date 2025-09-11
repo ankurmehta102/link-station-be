@@ -13,6 +13,7 @@ import { User } from './entities/user.entity';
 import { UpdateUsernameDto } from './dto/update-username.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { BaseUserDto } from './dto/base-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -129,6 +130,23 @@ export class UsersService {
       });
     } catch (err) {
       console.log('[updatePassword] err--->', err);
+      throw err;
+    }
+  }
+
+  async getUserProfile(userId: number) {
+    try {
+      const user = await this.usersRepo.findOneBy({ userId });
+
+      if (!user) {
+        throw new NotFoundException('User does not exist');
+      }
+
+      return plainToInstance(BaseUserDto, user, {
+        excludeExtraneousValues: true,
+      });
+    } catch (err) {
+      console.log('[getUserProfile] err--->', err);
       throw err;
     }
   }
