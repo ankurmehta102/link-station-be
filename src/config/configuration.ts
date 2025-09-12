@@ -10,4 +10,10 @@ export default () => ({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
   },
+
+  jwt: {
+    secret: process.env.JWT_SECRET,
+    accessExpirationSeconds:
+      parseInt(process.env.JWT_ACCESS_EXPIRATION_SECONDS, 10) || 3600,
+  },
 });

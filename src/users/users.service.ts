@@ -166,4 +166,8 @@ export class UsersService {
       throw err;
     }
   }
+
+  async findUserByEmail(email: string) {
+    return this.usersRepo.findOneBy({ email });
+  }
 }
