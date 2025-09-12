@@ -1,4 +1,3 @@
-import { Expose } from 'class-transformer';
 import {
   Check,
   Column,
@@ -16,14 +15,12 @@ enum UserRole {
 @Entity('users')
 @Check(`"user_role" IN ('${UserRole.Admin}', '${UserRole.User}')`)
 export class User {
-  @Expose()
   @PrimaryGeneratedColumn({
     name: 'user_id',
     type: 'int',
   })
   userId: number;
 
-  @Expose()
   @Column({
     type: 'nvarchar',
     length: 255,
@@ -38,7 +35,6 @@ export class User {
   })
   passwordHash: string;
 
-  @Expose()
   @Column({
     type: 'nvarchar',
     length: 30,
@@ -46,7 +42,6 @@ export class User {
   })
   username: string;
 
-  @Expose()
   @Column({
     name: 'first_name',
     type: 'nvarchar',
@@ -54,7 +49,6 @@ export class User {
   })
   firstName: string;
 
-  @Expose()
   @Column({
     name: 'last_name',
     type: 'nvarchar',

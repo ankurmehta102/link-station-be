@@ -45,7 +45,7 @@ export class UsersService {
       });
       const savedUser = await this.usersRepo.save(newUser);
 
-      return plainToInstance(User, savedUser, {
+      return plainToInstance(BaseUserDto, savedUser, {
         excludeExtraneousValues: true,
       });
     } catch (err) {
@@ -73,7 +73,7 @@ export class UsersService {
 
       usersFound[0].username = username;
       const savedUser = await this.usersRepo.save(usersFound[0]);
-      return plainToInstance(User, savedUser, {
+      return plainToInstance(BaseUserDto, savedUser, {
         excludeExtraneousValues: true,
       });
     } catch (err) {
@@ -101,7 +101,7 @@ export class UsersService {
 
       usersFound[0].email = email;
       const savedUser = await this.usersRepo.save(usersFound[0]);
-      return plainToInstance(User, savedUser, {
+      return plainToInstance(BaseUserDto, savedUser, {
         excludeExtraneousValues: true,
       });
     } catch (err) {
@@ -125,7 +125,7 @@ export class UsersService {
       user.passwordHash = passwordHash;
       const savedUser = await this.usersRepo.save(user);
 
-      return plainToInstance(User, savedUser, {
+      return plainToInstance(BaseUserDto, savedUser, {
         excludeExtraneousValues: true,
       });
     } catch (err) {
