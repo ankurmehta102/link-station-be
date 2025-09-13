@@ -14,11 +14,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUsernameDto } from './dto/update-username.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
+import { Public } from '../decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Public()
   @Post('signup')
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
