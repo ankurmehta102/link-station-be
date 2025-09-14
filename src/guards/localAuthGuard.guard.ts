@@ -11,7 +11,7 @@ import { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
-type JwtPayloadRecieved = {
+export type JwtPayloadRecieved = {
   sub: number;
   username: string;
   iat: number;
