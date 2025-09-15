@@ -10,9 +10,6 @@ import { plainToInstance } from 'class-transformer';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import { UpdateUsernameDto } from './dto/update-username.dto';
-import { UpdateEmailDto } from './dto/update-email.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
 import { BaseUserDto } from './dto/base-user.dto';
 
 @Injectable()
@@ -54,9 +51,8 @@ export class UsersService {
     }
   }
 
-  async updateUsername(updateUsernameDto: UpdateUsernameDto) {
+  async updateUsername(userId: number, username: string) {
     try {
-      const { userId, username } = updateUsernameDto;
       const usersFound = await this.usersRepo.find({
         where: [{ userId }, { username }],
       });
@@ -82,9 +78,8 @@ export class UsersService {
     }
   }
 
-  async updateEmail(updateEmailDto: UpdateEmailDto) {
+  async updateEmail(userId: number, email: string) {
     try {
-      const { userId, email } = updateEmailDto;
       const usersFound = await this.usersRepo.find({
         where: [{ userId }, { email }],
       });
@@ -110,10 +105,8 @@ export class UsersService {
     }
   }
 
-  async updatePassword(updatePasswordDto: UpdatePasswordDto) {
+  async updatePassword(userId: number, password: string) {
     try {
-      const { userId, password } = updatePasswordDto;
-
       const user = await this.usersRepo.findOneBy({ userId });
 
       if (!user) {

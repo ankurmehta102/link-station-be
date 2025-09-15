@@ -28,19 +28,31 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Patch('username')
-  updateUsername(@Body() updateUsernameDto: UpdateUsernameDto) {
-    return this.usersService.updateUsername(updateUsernameDto);
+  @UseGuards(OwnershipGuard)
+  @Patch('username/:userId')
+  updateUsername(
+    @Body() updateUsernameDto: UpdateUsernameDto,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.usersService.updateUsername(userId, updateUsernameDto.username);
   }
 
-  @Patch('email')
-  updateEmail(@Body() updateEmailDto: UpdateEmailDto) {
-    return this.usersService.updateEmail(updateEmailDto);
+  @UseGuards(OwnershipGuard)
+  @Patch('email/:userId')
+  updateEmail(
+    @Body() updateEmailDto: UpdateEmailDto,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.usersService.updateEmail(userId, updateEmailDto.email);
   }
 
-  @Patch('password')
-  updatePassword(@Body() updatePasswordDto: UpdatePasswordDto) {
-    return this.usersService.updatePassword(updatePasswordDto);
+  @UseGuards(OwnershipGuard)
+  @Patch('password/:userId')
+  updatePassword(
+    @Body() updatePasswordDto: UpdatePasswordDto,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
+    return this.usersService.updatePassword(userId, updatePasswordDto.password);
   }
 
   @UseGuards(OwnershipGuard)
@@ -49,8 +61,8 @@ export class UsersController {
     return this.usersService.getUserProfile(userId);
   }
 
-  @Delete(':userId')
   @UseGuards(OwnershipGuard)
+  @Delete(':userId')
   deleteUser(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.deleteUser(userId);
   }
