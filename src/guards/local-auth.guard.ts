@@ -11,7 +11,7 @@ import { Request } from 'express';
 
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
-export type JwtPayloadRecieved = {
+export type JwtPayload = {
   sub: number;
   username: string;
   iat: number;
@@ -41,12 +41,9 @@ export class LocalAuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload: JwtPayloadRecieved = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: this.configService.get('jwt').secret,
-        },
-      );
+      const payload: JwtPayload = await this.jwtService.verifyAsync(token, {
+        secret: this.configService.get('jwt').secret,
+      });
 
       request['user'] = payload;
     } catch {

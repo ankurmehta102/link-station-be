@@ -16,7 +16,7 @@ import { UpdateUsernameDto } from './dto/update-username.dto';
 import { UpdateEmailDto } from './dto/update-email.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { Public } from '../decorators/public.decorator';
-import { OwnershipGuard } from '../guards/ownershipGuard.guard';
+import { OwnershipGuard } from '../guards/ownership.guard';
 
 @Controller('users')
 export class UsersController {

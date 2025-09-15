@@ -21,5 +21,42 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/naming-convention': [
+      'error',
+      {
+        selector: 'class',
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'variable',
+        format: ['camelCase', 'UPPER_CASE'],
+      },
+      {
+        // for arrow function
+        selector: 'variable',
+        types: ['function'],
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'function',
+        format: ['camelCase'],
+      },
+      {
+        selector: 'method',
+        format: ['camelCase'],
+      },
+      {
+        selector: 'enum',
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'enumMember',
+        format: ['PascalCase'],
+      },
+      {
+        selector: 'typeAlias',
+        format: ['PascalCase'],
+      },
+    ],
   },
 };
