@@ -16,4 +16,10 @@ export default () => ({
     accessExpirationSeconds:
       parseInt(process.env.JWT_ACCESS_EXPIRATION_SECONDS, 10) || 3600,
   },
+
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+  },
 });

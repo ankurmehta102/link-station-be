@@ -29,14 +29,14 @@ module.exports = {
       },
       {
         selector: 'variable',
-        format: ['camelCase', 'UPPER_CASE'],
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
       },
-      {
-        // for arrow function
-        selector: 'variable',
-        types: ['function'],
-        format: ['PascalCase'],
-      },
+      // {
+      //   // for arrow function
+      //   selector: 'variable',
+      //   types: ['function'],
+      //   format: ['PascalCase'],
+      // },
       {
         selector: 'function',
         format: ['camelCase'],

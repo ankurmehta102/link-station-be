@@ -13,6 +13,7 @@ class EnvironmentVariables {
   @IsNumber()
   PORT: number;
 
+  //Database
   @IsString()
   DB_HOST: string;
   @IsNumber()
@@ -24,10 +25,19 @@ class EnvironmentVariables {
   @IsString()
   DB_DATABASE: string;
 
+  //Jwt
   @IsString()
   JWT_SECRET: string;
   @IsNumber()
   JWT_ACCESS_EXPIRATION_SECONDS: number;
+
+  //Cloudinary
+  @IsString()
+  CLOUDINARY_CLOUD_NAME: string;
+  @IsString()
+  CLOUDINARY_API_KEY: string;
+  @IsString()
+  CLOUDINARY_API_SECRET: string;
 }
 
 export function validate(config: Record<string, unknown>) {
