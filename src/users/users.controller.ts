@@ -4,11 +4,15 @@ import {
   Delete,
   Get,
   Param,
+  ParseFilePipe,
   ParseIntPipe,
   Patch,
   Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -17,6 +21,8 @@ import { UpdateEmailDto } from './dto/update-email.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { Public } from '../decorators/public.decorator';
 import { OwnershipGuard } from '../guards/ownership.guard';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ImageFileValidator } from '../validators/image-file.validator';
 
 @Controller('users')
 export class UsersController {
@@ -65,5 +71,31 @@ export class UsersController {
   @Delete(':userId')
   deleteUser(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.deleteUser(userId);
+  }
+
+  @UseGuards(OwnershipGuard)
+  @UseInterceptors(FileInterceptor('profilePicture'))
+  @Patch('/profile/:userId')
+  updateProfile(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() updateProfileDto: UpdateProfileDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new ImageFileValidator({
+            maxSize: 2 * 1024 * 1024,
+            fileType: /^image\/(jpeg|png)$/,
+          }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    profilePicture?: Express.Multer.File,
+  ) {
+    return this.usersService.updateProfile(
+      userId,
+      updateProfileDto,
+      profilePicture,
+    );
   }
 }

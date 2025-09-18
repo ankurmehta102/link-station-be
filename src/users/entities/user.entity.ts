@@ -81,6 +81,14 @@ export class User {
   profilePictureUrl: string;
 
   @Column({
+    name: 'profile_picture_public_id',
+    type: 'nvarchar',
+    length: 2083,
+    nullable: true,
+  })
+  profilePicturePublicId: string;
+
+  @Column({
     name: 'user_role',
     type: 'varchar',
     length: 8,

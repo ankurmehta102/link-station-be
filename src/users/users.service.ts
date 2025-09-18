@@ -1,6 +1,8 @@
 import {
   ConflictException,
+  HttpException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,12 +13,15 @@ import { plainToInstance } from 'class-transformer';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { BaseUserDto } from './dto/base-user.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepo: Repository<User>,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -86,7 +91,7 @@ export class UsersService {
 
       if (
         !usersFound.length ||
-        (usersFound.length === 1 && usersFound[0].userId !== userId)
+        (usersFound.length === 1 && usersFound[0].userId !== userId) // true only if user record found by email.
       ) {
         throw new NotFoundException('User does not exist');
       }
@@ -162,5 +167,56 @@ export class UsersService {
 
   async findUserByEmail(email: string) {
     return this.usersRepo.findOneBy({ email });
+  }
+
+  async updateProfile(
+    userId: number,
+    updateProfileDto: UpdateProfileDto,
+    profilePicture?: Express.Multer.File,
+  ) {
+    try {
+      const user = await this.usersRepo.preload({
+        userId,
+        ...updateProfileDto,
+      });
+      if (!user) throw new NotFoundException('User does not exist');
+
+      if (profilePicture) {
+        const imageInfo =
+          await this.cloudinaryService.uploadFile(profilePicture);
+
+        // Delete the previous profile picture in cloudinary
+        // if it exists (skipped on first upload)
+        if (user.profilePicturePublicId) {
+          try {
+            const res = await this.cloudinaryService.deleteAsset(
+              user.profilePicturePublicId,
+            );
+            res.result !== 'ok' &&
+              console.log('[deleteAsset] failed --->', {
+                publicId: user.profilePicturePublicId,
+                res,
+              });
+          } catch (err) {
+            console.log('[deleteAsset] err --->', {
+              publicId: user.profilePicturePublicId,
+              err,
+            });
+          }
+        }
+
+        user.profilePictureUrl = imageInfo.secure_url;
+        user.profilePicturePublicId = imageInfo.public_id;
+      }
+
+      const savedUser = await this.usersRepo.save(user);
+      return plainToInstance(BaseUserDto, savedUser, {
+        excludeExtraneousValues: true,
+      });
+    } catch (err) {
+      console.log('[updateProfile] err--->', err);
+      if (err instanceof HttpException) throw err;
+      throw new InternalServerErrorException(err?.message);
+    }
   }
 }

@@ -7,6 +7,7 @@ import {
   IsString,
   MaxLength,
   MinLength,
+  ValidateIf,
 } from 'class-validator';
 
 export class BaseUserDto {
@@ -44,9 +45,15 @@ export class BaseUserDto {
   @Expose()
   lastName?: string;
 
+  @IsString()
+  @ValidateIf((o) => o.displayEmail !== '')
+  @IsEmail()
+  @MaxLength(50)
   @Expose()
   displayEmail: string;
 
+  @IsString()
+  @MaxLength(150)
   @Expose()
   bio: string;
 

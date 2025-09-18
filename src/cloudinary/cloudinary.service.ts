@@ -23,4 +23,10 @@ export class CloudinaryService {
         .end(file.buffer);
     });
   }
+
+  deleteAsset(publicId: string): Promise<any> {
+    return this.cloudinary.uploader.destroy(publicId, {
+      resource_type: 'image',
+    });
+  }
 }
