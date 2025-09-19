@@ -1,18 +1,14 @@
+import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
-  ValidateIf,
 } from 'class-validator';
 
 export class BaseUserDto {
-  @IsNumber()
-  userId: number;
-
   @IsEmail()
   @IsNotEmpty()
   @MaxLength(255)
@@ -34,18 +30,9 @@ export class BaseUserDto {
   @MaxLength(20)
   firstName: string;
 
+  @Transform(({ value }) => (value === '' ? null : value))
   @IsString()
   @IsOptional()
   @MaxLength(20)
   lastName?: string;
-
-  @IsString()
-  @ValidateIf((o) => o.displayEmail !== '')
-  @IsEmail()
-  @MaxLength(50)
-  displayEmail: string;
-
-  @IsString()
-  @MaxLength(150)
-  bio: string;
 }
