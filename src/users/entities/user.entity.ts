@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Check,
   Column,
@@ -28,6 +29,7 @@ export class User {
   })
   email: string;
 
+  @Exclude()
   @Column({
     name: 'password_hash',
     type: 'nvarchar',
@@ -80,6 +82,7 @@ export class User {
   })
   profilePictureUrl: string;
 
+  @Exclude()
   @Column({
     name: 'profile_picture_public_id',
     type: 'nvarchar',

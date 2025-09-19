@@ -8,11 +8,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { hash } from 'bcrypt';
-import { plainToInstance } from 'class-transformer';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import { BaseUserDto } from './dto/base-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
@@ -45,11 +43,7 @@ export class UsersService {
         passwordHash,
         ...createUserDto,
       });
-      const savedUser = await this.usersRepo.save(newUser);
-
-      return plainToInstance(BaseUserDto, savedUser, {
-        excludeExtraneousValues: true,
-      });
+      return await this.usersRepo.save(newUser);
     } catch (err) {
       console.log('[create] err-->', err);
       throw err;
@@ -73,10 +67,7 @@ export class UsersService {
       }
 
       usersFound[0].username = username;
-      const savedUser = await this.usersRepo.save(usersFound[0]);
-      return plainToInstance(BaseUserDto, savedUser, {
-        excludeExtraneousValues: true,
-      });
+      return this.usersRepo.save(usersFound[0]);
     } catch (err) {
       console.log('[updateUsername] err--->', err);
       throw err;
@@ -100,10 +91,7 @@ export class UsersService {
       }
 
       usersFound[0].email = email;
-      const savedUser = await this.usersRepo.save(usersFound[0]);
-      return plainToInstance(BaseUserDto, savedUser, {
-        excludeExtraneousValues: true,
-      });
+      return this.usersRepo.save(usersFound[0]);
     } catch (err) {
       console.log('[updateEmail] err--->', err);
       throw err;
@@ -121,11 +109,7 @@ export class UsersService {
       const passwordHash = await hash(password, 10);
 
       user.passwordHash = passwordHash;
-      const savedUser = await this.usersRepo.save(user);
-
-      return plainToInstance(BaseUserDto, savedUser, {
-        excludeExtraneousValues: true,
-      });
+      return this.usersRepo.save(user);
     } catch (err) {
       console.log('[updatePassword] err--->', err);
       throw err;
@@ -140,9 +124,7 @@ export class UsersService {
         throw new NotFoundException('User does not exist');
       }
 
-      return plainToInstance(BaseUserDto, user, {
-        excludeExtraneousValues: true,
-      });
+      return user;
     } catch (err) {
       console.log('[getUserProfile] err--->', err);
       throw err;
@@ -157,8 +139,7 @@ export class UsersService {
         throw new NotFoundException('User does not exist');
       }
 
-      await this.usersRepo.remove(user);
-      return 'User deleted';
+      return this.usersRepo.remove(user);
     } catch (err) {
       console.log('[deleteUser] err--->', err);
       throw err;
@@ -209,10 +190,7 @@ export class UsersService {
         user.profilePicturePublicId = imageInfo.public_id;
       }
 
-      const savedUser = await this.usersRepo.save(user);
-      return plainToInstance(BaseUserDto, savedUser, {
-        excludeExtraneousValues: true,
-      });
+      return this.usersRepo.save(user);
     } catch (err) {
       console.log('[updateProfile] err--->', err);
       if (err instanceof HttpException) throw err;

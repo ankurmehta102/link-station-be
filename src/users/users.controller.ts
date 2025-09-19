@@ -23,6 +23,7 @@ import { Public } from '../decorators/public.decorator';
 import { OwnershipGuard } from '../guards/ownership.guard';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ImageFileValidator } from '../validators/image-file.validator';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -39,7 +40,7 @@ export class UsersController {
   updateUsername(
     @Body() updateUsernameDto: UpdateUsernameDto,
     @Param('userId', ParseIntPipe) userId: number,
-  ) {
+  ): Promise<User> {
     return this.usersService.updateUsername(userId, updateUsernameDto.username);
   }
 
@@ -48,7 +49,7 @@ export class UsersController {
   updateEmail(
     @Body() updateEmailDto: UpdateEmailDto,
     @Param('userId', ParseIntPipe) userId: number,
-  ) {
+  ): Promise<User> {
     return this.usersService.updateEmail(userId, updateEmailDto.email);
   }
 
@@ -57,19 +58,19 @@ export class UsersController {
   updatePassword(
     @Body() updatePasswordDto: UpdatePasswordDto,
     @Param('userId', ParseIntPipe) userId: number,
-  ) {
+  ): Promise<User> {
     return this.usersService.updatePassword(userId, updatePasswordDto.password);
   }
 
   @UseGuards(OwnershipGuard)
   @Get('profile/:userId')
-  getUserProfile(@Param('userId', ParseIntPipe) userId: number) {
+  getUserProfile(@Param('userId', ParseIntPipe) userId: number): Promise<User> {
     return this.usersService.getUserProfile(userId);
   }
 
   @UseGuards(OwnershipGuard)
   @Delete(':userId')
-  deleteUser(@Param('userId', ParseIntPipe) userId: number) {
+  deleteUser(@Param('userId', ParseIntPipe) userId: number): Promise<User> {
     return this.usersService.deleteUser(userId);
   }
 
@@ -91,7 +92,7 @@ export class UsersController {
       }),
     )
     profilePicture?: Express.Multer.File,
-  ) {
+  ): Promise<User> {
     return this.usersService.updateProfile(
       userId,
       updateProfileDto,

@@ -5,9 +5,6 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { plainToInstance } from 'class-transformer';
-
-import { BaseUserDto } from '../users/dto/base-user.dto';
 import { UsersService } from '../users/users.service';
 import { LoginUserDto } from './dto/login-user.dto';
 
@@ -34,9 +31,7 @@ export class AuthService {
       const jwtPayload = { sub: user.userId, username: user.username };
 
       return {
-        user: plainToInstance(BaseUserDto, user, {
-          excludeExtraneousValues: true,
-        }),
+        user: user,
         access_token: await this.jwtService.signAsync(jwtPayload),
       };
     } catch (err) {
