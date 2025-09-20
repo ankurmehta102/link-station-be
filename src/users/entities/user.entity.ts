@@ -1,11 +1,11 @@
 import { Exclude } from 'class-transformer';
 import {
+  BeforeUpdate,
   Check,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 enum UserRole {
@@ -106,10 +106,17 @@ export class User {
   })
   createdAt: Date;
 
-  @UpdateDateColumn({
+  // using @Column() instead of @UpdateDateColumn()
+  // because @UpdateDateColumn() stores date in local time instead of UTC.
+  @Column({
     name: 'updated_at',
     type: 'datetime2',
     default: () => 'SYSUTCDATETIME()',
   })
   updatedAt: Date;
+
+  @BeforeUpdate()
+  setUpdatedAt() {
+    this.updatedAt = new Date();
+  }
 }
