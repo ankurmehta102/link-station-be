@@ -139,6 +139,10 @@ export class UsersService {
         throw new NotFoundException('User does not exist');
       }
 
+      // Delete profile picture in Cloudinary if it exists.
+      user.profilePicturePublicId &&
+        this.cloudinaryService.deleteAsset(user.profilePicturePublicId);
+
       return this.usersRepo.remove(user);
     } catch (err) {
       console.log('[deleteUser] err--->', err);
