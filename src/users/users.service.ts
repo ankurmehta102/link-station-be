@@ -166,25 +166,9 @@ export class UsersService {
         const imageInfo =
           await this.cloudinaryService.uploadFile(profilePicture);
 
-        // Delete the previous profile picture in cloudinary
-        // if it exists (skipped on first upload)
-        if (user.profilePicturePublicId) {
-          try {
-            const res = await this.cloudinaryService.deleteAsset(
-              user.profilePicturePublicId,
-            );
-            res.result !== 'ok' &&
-              console.log('[deleteAsset] failed --->', {
-                publicId: user.profilePicturePublicId,
-                res,
-              });
-          } catch (err) {
-            console.log('[deleteAsset] err --->', {
-              publicId: user.profilePicturePublicId,
-              err,
-            });
-          }
-        }
+        // Delete old profile picture from Cloudinary (if it exists)
+        user.profilePicturePublicId &&
+          this.cloudinaryService.deleteAsset(user.profilePicturePublicId);
 
         user.profilePictureUrl = imageInfo.secure_url;
         user.profilePicturePublicId = imageInfo.public_id;

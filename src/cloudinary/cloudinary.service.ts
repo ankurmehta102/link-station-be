@@ -24,9 +24,22 @@ export class CloudinaryService {
     });
   }
 
-  deleteAsset(publicId: string): Promise<any> {
-    return this.cloudinary.uploader.destroy(publicId, {
-      resource_type: 'image',
-    });
+  async deleteAsset(publicId: string): Promise<void> {
+    try {
+      const res = await this.cloudinary.uploader.destroy(publicId, {
+        resource_type: 'image',
+      });
+
+      res.result !== 'ok' &&
+        console.log('[deleteAsset] failed --->', {
+          publicId,
+          res,
+        });
+    } catch (err) {
+      console.log('[deleteAsset] err --->', {
+        publicId,
+        err,
+      });
+    }
   }
 }

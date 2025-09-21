@@ -106,8 +106,8 @@ export class User {
   })
   createdAt: Date;
 
-  // using @Column() instead of @UpdateDateColumn()
-  // because @UpdateDateColumn() stores date in local time instead of UTC.
+  // @UpdateDateColumn() stores the date in local time instead of UTC.
+  // Therefore, @Column() with @BeforeUpdate() is used instead.
   @Column({
     name: 'updated_at',
     type: 'datetime2',
@@ -117,6 +117,6 @@ export class User {
 
   @BeforeUpdate()
   setUpdatedAt() {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date(); //UTC
   }
 }
