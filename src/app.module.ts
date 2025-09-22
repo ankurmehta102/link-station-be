@@ -11,7 +11,7 @@ import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { LinksModule } from './links/links.module';
-import { Link } from './links/entities/linksentity';
+import { Link } from './links/entities/link.entity';
 
 @Module({
   imports: [
