@@ -5,8 +5,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { Link } from '../../links/entities/link.entity';
 
 enum UserRole {
   Admin = 'admin',
@@ -119,4 +122,7 @@ export class User {
   setUpdatedAt() {
     this.updatedAt = new Date(); //UTC
   }
+
+  @OneToMany(() => Link, (link) => link.userId)
+  links: Link[];
 }

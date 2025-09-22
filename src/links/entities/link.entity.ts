@@ -3,8 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+
+import { User } from '../../users/entities/user.entity';
 
 @Entity('links')
 export class Link {
@@ -22,31 +27,35 @@ export class Link {
   linkName: string;
 
   @Column({
+    name: 'display_order',
+    type: 'tinyint',
+  })
+  displayOrder: number;
+
+  @Column({
     name: 'link_url',
     type: 'nvarchar',
     length: 2083,
+    nullable: true,
   })
-  linkUrl: string;
+  linkUrl?: string;
 
   @Column({
     name: 'link_image_url',
     type: 'nvarchar',
     length: 2083,
+    nullable: true,
   })
-  linkImageUrl: string;
+  linkImageUrl?: string;
 
+  @Exclude()
   @Column({
     name: 'link_image_public_id',
     type: 'nvarchar',
     length: 2083,
+    nullable: true,
   })
-  linkImageProfileId: string;
-
-  @Column({
-    name: 'display_order',
-    type: 'tinyint',
-  })
-  displayOrder: number;
+  linkImageProfileId?: string;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -68,4 +77,11 @@ export class Link {
   setUpdatedAt() {
     this.updatedAt = new Date(); //UTC
   }
+
+  @ManyToOne(() => User, (user) => user.links, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
+  @JoinColumn({ name: 'user_id' })
+  userId: number;
 }

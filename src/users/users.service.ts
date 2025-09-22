@@ -154,6 +154,13 @@ export class UsersService {
     return this.usersRepo.findOneBy({ email });
   }
 
+  async findUserById(userId: number) {
+    return this.usersRepo.findOne({
+      where: { userId },
+      relations: ['links'],
+    });
+  }
+
   async updateProfile(
     userId: number,
     updateProfileDto: UpdateProfileDto,
