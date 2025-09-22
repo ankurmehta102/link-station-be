@@ -10,6 +10,8 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { LinksModule } from './links/links.module';
+import { Link } from './links/entities/linksentity';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
           username: configService.get('database').username,
           password: configService.get('database').password,
           database: configService.get('database').database,
-          entities: [User],
+          entities: [User, Link],
           synchronize:
             configService.get('node_env') === Environment.Development,
           extra: {
@@ -42,6 +44,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
     UsersModule,
     AuthModule,
     CloudinaryModule,
+    LinksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
