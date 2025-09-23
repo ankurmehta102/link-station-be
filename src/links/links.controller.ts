@@ -17,13 +17,13 @@ import { ImageFileValidator } from '../validators/image-file.validator';
 import { OwnershipGuard } from '../guards/ownership.guard';
 import { Link } from './entities/link.entity';
 
-@Controller('links')
+@Controller('users/:userId/links')
 export class LinksController {
   constructor(private readonly linksService: LinksService) {}
 
   @UseGuards(OwnershipGuard)
   @UseInterceptors(FileInterceptor('linkImage'))
-  @Post('create/:userId')
+  @Post()
   create(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createLinkDto: CreateLinkDto,
