@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseFilePipe,
   ParseIntPipe,
@@ -41,5 +42,11 @@ export class LinksController {
     linkImage?: Express.Multer.File,
   ): Promise<Link> {
     return this.linksService.create(userId, createLinkDto, linkImage);
+  }
+
+  @UseGuards(OwnershipGuard)
+  @Get()
+  getAll(@Param('userId', ParseIntPipe) userId: number) {
+    return this.linksService.getAll(userId);
   }
 }

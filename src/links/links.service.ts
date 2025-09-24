@@ -51,4 +51,10 @@ export class LinksService {
       throw new InternalServerErrorException(err?.message);
     }
   }
+
+  async getAll(userId: number) {
+    const user = await this.usersService.findUserById(userId);
+    if (!user) throw new NotFoundException('User does not exist');
+    return user.links;
+  }
 }
