@@ -27,7 +27,7 @@ export class LinksService {
     linkImage?: Express.Multer.File,
   ) {
     try {
-      const user = await this.usersService.findUserById(userId);
+      const user = await this.usersService.findUserWithLinks(userId);
       if (!user) throw new NotFoundException('User does not exist');
 
       let imageInfo = {};
@@ -53,7 +53,7 @@ export class LinksService {
   }
 
   async getAll(userId: number) {
-    const user = await this.usersService.findUserById(userId);
+    const user = await this.usersService.findUserWithLinks(userId);
     if (!user) throw new NotFoundException('User does not exist');
     return user.links;
   }

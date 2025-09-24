@@ -154,7 +154,7 @@ export class UsersService {
     return this.usersRepo.findOneBy({ email });
   }
 
-  async findUserById(userId: number) {
+  async findUserWithLinks(userId: number) {
     return this.usersRepo.findOne({
       where: { userId },
       relations: ['links'],
