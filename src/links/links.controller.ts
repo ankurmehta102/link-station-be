@@ -5,6 +5,7 @@ import {
   Param,
   ParseFilePipe,
   ParseIntPipe,
+  Patch,
   Post,
   UploadedFile,
   UseGuards,
@@ -17,6 +18,7 @@ import { CreateLinkDto } from './dto/create-link.dto';
 import { ImageFileValidator } from '../validators/image-file.validator';
 import { OwnershipGuard } from '../guards/ownership.guard';
 import { Link } from './entities/link.entity';
+import { UpdateLinkDto } from './dto/update-link.dto';
 
 @Controller('users/:userId/links')
 export class LinksController {
@@ -48,5 +50,28 @@ export class LinksController {
   @Get()
   getAll(@Param('userId', ParseIntPipe) userId: number) {
     return this.linksService.getAll(userId);
+  }
+
+  @UseGuards(OwnershipGuard)
+  @UseInterceptors(FileInterceptor('linkImage'))
+  @Patch(':linkId')
+  update(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('linkId', ParseIntPipe) linkId: number,
+    @Body() updateLinkDto: UpdateLinkDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new ImageFileValidator({
+            maxSize: 2 * 1024 * 1024,
+            fileType: /^image\/(jpeg|png)$/,
+          }),
+        ],
+        fileIsRequired: false,
+      }),
+    )
+    linkImage?: Express.Multer.File,
+  ): Promise<Link> {
+    return this.linksService.update(userId, linkId, updateLinkDto, linkImage);
   }
 }

@@ -12,6 +12,7 @@ import { UsersService } from '../users/users.service';
 import { Link } from './entities/link.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { getNextDisplayOrder } from '../helper/utils';
+import { UpdateLinkDto } from './dto/update-link.dto';
 
 @Injectable()
 export class LinksService {
@@ -56,5 +57,37 @@ export class LinksService {
     const user = await this.usersService.findUserWithLinks(userId);
     if (!user) throw new NotFoundException('User does not exist');
     return user.links;
+  }
+
+  async update(
+    userId: number,
+    linkId: number,
+    updateLinkDto: UpdateLinkDto,
+    linkImage?: Express.Multer.File,
+  ) {
+    try {
+      const user = await this.usersService.findUserWithLinks(userId);
+      if (!user) throw new NotFoundException('User does not exist');
+
+      const link = user.links.find((element) => element.linkId === linkId);
+      if (!link) throw new NotFoundException('Link does not exist');
+
+      if (linkImage) {
+        const imageInfo = await this.cloudinaryService.uploadFile(linkImage);
+
+        // Delete old profile picture from Cloudinary (if it exists)
+        link.linkImagePublicId &&
+          this.cloudinaryService.deleteAsset(link.linkImagePublicId);
+
+        link.linkImageUrl = imageInfo.secure_url;
+        link.linkImagePublicId = imageInfo.public_id;
+      }
+
+      return this.linksRepo.save(Object.assign(link, updateLinkDto));
+    } catch (err) {
+      if (err instanceof HttpException) throw err;
+      console.log('[LinksService/update] err--->', err);
+      throw new InternalServerErrorException(err?.message);
+    }
   }
 }

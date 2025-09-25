@@ -9,5 +9,5 @@ export class CreateLinkDto {
   @Transform(({ value }) => (value === '' ? null : value))
   @IsString()
   @IsOptional()
-  linkUrl: string;
+  linkUrl?: string;
 }

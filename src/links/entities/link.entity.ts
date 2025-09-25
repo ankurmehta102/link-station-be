@@ -55,7 +55,7 @@ export class Link {
     length: 2083,
     nullable: true,
   })
-  linkImageProfileId?: string;
+  linkImagePublicId?: string;
 
   @CreateDateColumn({
     name: 'created_at',
