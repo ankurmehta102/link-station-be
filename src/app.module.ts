@@ -37,6 +37,9 @@ import { Link } from './links/entities/link.entity';
             trustServerCertificate:
               configService.get('node_env') === Environment.Development,
           },
+          options: {
+            useUTC: true,
+          },
         };
       },
       inject: [ConfigService],
