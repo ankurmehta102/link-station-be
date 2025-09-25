@@ -90,4 +90,24 @@ export class LinksService {
       throw new InternalServerErrorException(err?.message);
     }
   }
+
+  async delete(userId: number, linkId: number) {
+    try {
+      const user = await this.usersService.findUserWithLinks(userId);
+      if (!user) throw new NotFoundException('User does not exist');
+
+      const link = user.links.find((element) => element.linkId === linkId);
+      if (!link) throw new NotFoundException('Link does not exist');
+
+      //Delete link image in cloudinary
+      link.linkImagePublicId &&
+        this.cloudinaryService.deleteAsset(link.linkImagePublicId);
+
+      return this.linksRepo.remove(link);
+    } catch (err) {
+      if (err instanceof HttpException) throw err;
+      console.log('[LinksService/delete] err--->', err);
+      throw new InternalServerErrorException(err?.message);
+    }
+  }
 }

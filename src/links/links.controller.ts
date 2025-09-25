@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseFilePipe,
@@ -73,5 +74,14 @@ export class LinksController {
     linkImage?: Express.Multer.File,
   ): Promise<Link> {
     return this.linksService.update(userId, linkId, updateLinkDto, linkImage);
+  }
+
+  @UseGuards(OwnershipGuard)
+  @Delete(':linkId')
+  delete(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('linkId', ParseIntPipe) linkId: number,
+  ) {
+    return this.linksService.delete(userId, linkId);
   }
 }
