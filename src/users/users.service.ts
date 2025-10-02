@@ -187,10 +187,7 @@ export class UsersService {
     profilePicture?: Express.Multer.File,
   ) {
     try {
-      const user = await this.usersRepo.preload({
-        userId,
-        ...updateProfileDto,
-      });
+      const user = await this.usersRepo.findOneBy({ userId });
       if (!user) throw new NotFoundException('User does not exist');
 
       if (profilePicture) {
@@ -205,7 +202,7 @@ export class UsersService {
         user.profilePicturePublicId = imageInfo.public_id;
       }
 
-      return this.usersRepo.save(user);
+      return this.usersRepo.save(Object.assign(user, updateProfileDto));
     } catch (err) {
       console.log('[updateProfile] err--->', err);
       if (err instanceof HttpException) throw err;
