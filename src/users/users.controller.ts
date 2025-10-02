@@ -68,6 +68,12 @@ export class UsersController {
     return this.usersService.getUserProfile(userId);
   }
 
+  @Public()
+  @Get('/:username')
+  getUser(@Param('username') username: string) {
+    return this.usersService.getUser(username);
+  }
+
   @UseGuards(OwnershipGuard)
   @Delete(':userId')
   deleteUser(@Param('userId', ParseIntPipe) userId: number): Promise<User> {

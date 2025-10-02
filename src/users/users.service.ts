@@ -131,6 +131,26 @@ export class UsersService {
     }
   }
 
+  async getUser(username: string) {
+    const user = await this.usersRepo
+      .createQueryBuilder('user')
+      .leftJoin('user.links', 'links')
+      .where('user.username = :username', { username })
+      .select([
+        'user.firstName',
+        'user.lastName',
+        'user.username',
+        'user.bio',
+        'user.profilePictureUrl',
+        'user.displayEmail',
+        'links',
+      ])
+      .getOne();
+
+    if (!user) throw new NotFoundException('User does not exist');
+    return user;
+  }
+
   async deleteUser(userId: number) {
     try {
       const user = await this.usersRepo.findOneBy({ userId });
