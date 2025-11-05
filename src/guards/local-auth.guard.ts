@@ -35,8 +35,8 @@ export class LocalAuthGuard implements CanActivate {
     if (isPublic) return true;
 
     //jwt verification
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const request: Request = context.switchToHttp().getRequest();
+    const token = request.cookies?.access_token || '';
 
     if (!token) throw new UnauthorizedException();
 
@@ -51,8 +51,8 @@ export class LocalAuthGuard implements CanActivate {
     }
     return true;
   }
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
-  }
+  // private extractTokenFromHeader(request: Request): string | undefined {
+  //   const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  //   return type === 'Bearer' ? token : undefined;
+  // }
 }

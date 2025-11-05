@@ -32,7 +32,7 @@ export class AuthService {
 
       return {
         user: user,
-        access_token: await this.jwtService.signAsync(jwtPayload),
+        accessToken: await this.jwtService.signAsync(jwtPayload),
       };
     } catch (err) {
       console.log('[login] err--->', err);
