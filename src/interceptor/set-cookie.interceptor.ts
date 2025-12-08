@@ -14,7 +14,9 @@ export class SetCookieInterceptor implements NestInterceptor {
         if (data && data.accessToken) {
           res.cookie('access_token', data.accessToken, {
             httpOnly: true,
-            // secure: false,
+            secure: true,
+            sameSite: 'none',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
           });
           return data.user;
         }
