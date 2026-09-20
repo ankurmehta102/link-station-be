@@ -13,6 +13,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import 'multer';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
